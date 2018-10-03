@@ -70,7 +70,7 @@ extern NSString * const BrowseDirectChildren;
  @param completion     A completion block which returns the parsed response, or
      an error if unsuccessful
  */
-- (void)browseWithObjectID:(nullable NSString *)objectId browseFlag:(nullable NSString *)browseFlag filter:(nullable NSString *)filter startingIndex:(nullable NSNumber *)startingIndex requestedCount:(nullable NSNumber *)requestedCount sortCritera:(nullable NSString *)sortCriteria completion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)browseWithObjectID:(nullable NSString *)objectId browseFlag:(nullable NSString *)browseFlag filter:(nullable NSString *)filter startingIndex:(nullable NSNumber *)startingIndex requestedCount:(nullable NSNumber *)requestedCount sortCritera:(nullable NSString *)sortCriteria completion:(UPPResponseBlock)completion;
 
 /**
  Search the content directory service
@@ -88,7 +88,7 @@ extern NSString * const BrowseDirectChildren;
  @param completion     A completion block which returns the parsed response, or
      an error if unsuccessful
  */
-- (void)searchWithContainerID:(nullable NSString *)containerId searchCriteria:(nullable NSString *)searchCriteria filter:(nullable NSString *)filter startingIndex:(nullable NSNumber *)startingIndex requestedCount:(nullable NSNumber *)requestedCount sortCritera:(nullable NSString *)sortCriteria completion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)searchWithContainerID:(nullable NSString *)containerId searchCriteria:(nullable NSString *)searchCriteria filter:(nullable NSString *)filter startingIndex:(nullable NSNumber *)startingIndex requestedCount:(nullable NSNumber *)requestedCount sortCritera:(nullable NSString *)sortCriteria completion:(UPPResponseBlock)completion;
 
 NS_ASSUME_NONNULL_END
 

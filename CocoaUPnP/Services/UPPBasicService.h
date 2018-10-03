@@ -92,7 +92,7 @@ typedef void (^UPPSuccessBlock)(BOOL success, NSError * _Nullable error);
  call was successful or not. If the call was unsuccessful, an error object is
  also returned.
  */
-- (void)_sendPostRequestWithParameters:(nullable UPPParameters *)parameters action:(NSString *)action success:(UPPSuccessBlock)successBlock;
+- (NSURLSessionDataTask *)_sendPostRequestWithParameters:(nullable UPPParameters *)parameters action:(NSString *)action success:(UPPSuccessBlock)successBlock;
 
 /**
  Send a POST request, with a completion block
@@ -102,7 +102,7 @@ typedef void (^UPPSuccessBlock)(BOOL success, NSError * _Nullable error);
  @param completion A completion block either returning a dictionary response, or
      an error if the call failed
  */
-- (void)_sendPostRequestWithParameters:(nullable UPPParameters *)parameters action:(NSString *)action completion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)_sendPostRequestWithParameters:(nullable UPPParameters *)parameters action:(NSString *)action completion:(UPPResponseBlock)completion;
 
 @end
 

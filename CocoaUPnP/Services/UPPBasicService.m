@@ -51,12 +51,12 @@
     return [wrapper copy];
 }
 
-- (void)_sendPostRequestWithParameters:(UPPParameters *)parameters action:(NSString *)action success:(UPPSuccessBlock)successBlock
+- (NSURLSessionDataTask *)_sendPostRequestWithParameters:(UPPParameters *)parameters action:(NSString *)action success:(UPPSuccessBlock)successBlock
 {
     NSDictionary *wrapped = [self wrapParameters:parameters
                                       withAction:action];
 
-    [self.sessionManager POST:[self.controlURL absoluteString] parameters:wrapped progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    return [self.sessionManager POST:[self.controlURL absoluteString] parameters:wrapped progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (successBlock) {
             successBlock(YES, nil);
         }
@@ -67,12 +67,12 @@
     }];
 }
 
-- (void)_sendPostRequestWithParameters:(UPPParameters *)parameters action:(NSString *)action completion:(UPPResponseBlock)completion
+- (NSURLSessionDataTask *)_sendPostRequestWithParameters:(UPPParameters *)parameters action:(NSString *)action completion:(UPPResponseBlock)completion
 {
     NSDictionary *wrapped = [self wrapParameters:parameters
                                       withAction:action];
 
-    [self.sessionManager POST:[self.controlURL absoluteString] parameters:wrapped progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    return [self.sessionManager POST:[self.controlURL absoluteString] parameters:wrapped progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         completion(responseObject, nil);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         completion(nil, error);

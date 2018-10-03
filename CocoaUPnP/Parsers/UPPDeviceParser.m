@@ -12,6 +12,7 @@
 #import "UPPMediaRendererDevice.h"
 #import "UPPMediaServerDevice.h"
 #import "ONOXMLDocument+StringValueOrNil.h"
+#import <AFNetworking/AFNetworking.h>
 
 @implementation UPPDeviceParser
 
