@@ -14,16 +14,23 @@
 #import "ONOXMLDocument+StringValueOrNil.h"
 #import <AFNetworking/AFNetworking.h>
 
+@interface UPPDeviceParser ()
+@property (strong, nonatomic) AFHTTPSessionManager *manager;
+@end
+
 @implementation UPPDeviceParser
 
-+ (void)parseURL:(NSURL *)url withCompletion:(CompletionBlock)completion
+- (void)parseURL:(NSURL *)url withCompletion:(CompletionBlock)completion
 {
     if (!completion) { return; }
 
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
-    [manager GET:url.absoluteString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSData *data) {
+    if (!_manager) {
+        _manager = [AFHTTPSessionManager manager];
+        _manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [_manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
+    }
+
+    [_manager GET:url.absoluteString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSData *data) {
         UPPDeviceParser *parser = [[UPPDeviceParser alloc] initWithXMLData:data];
         [parser parseWithBaseURL:url completion:^(NSArray *devices, NSError *error) {
             completion(devices, error);
@@ -65,6 +72,9 @@
         } else if ([deviceType rangeOfString:@":MediaServer:"].location != NSNotFound) {
             device = [UPPMediaServerDevice mediaServerWithURN:deviceType
                                                       baseURL:baseURL];
+        } else {
+            device = [UPPBasicDevice deviceWithURN:deviceType
+                                           baseURL:baseURL];
         }
 
         if (!device) {

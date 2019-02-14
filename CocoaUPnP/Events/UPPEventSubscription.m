@@ -18,29 +18,29 @@
 
 #pragma mark - Initialisation
 
-+ (instancetype)subscriptionWithSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)uniqueServiceName
++ (instancetype)subscriptionWithSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)serviceIdentifier
 {
     return [[[self class] alloc] initWithSubscriptionID:nil
                                              expiryDate:nil
                                    eventSubscriptionURL:eventSubscriptionURL
-                                      serviceIdentifier:uniqueServiceName];
+                                      serviceIdentifier:serviceIdentifier];
 }
 
-+ (instancetype)subscriptionWithID:(NSString *)subscriptionID expiryDate:(NSDate *)expiryDate eventSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)uniqueServiceName
++ (instancetype)subscriptionWithID:(NSString *)subscriptionID expiryDate:(NSDate *)expiryDate eventSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)serviceIdentifier
 {
     return [[[self class] alloc] initWithSubscriptionID:subscriptionID
                                              expiryDate:expiryDate
                                    eventSubscriptionURL:eventSubscriptionURL
-                                      serviceIdentifier:uniqueServiceName];
+                                      serviceIdentifier:serviceIdentifier];
 }
 
-- (instancetype)initWithSubscriptionID:(NSString *)subscriptionID expiryDate:(NSDate *)expiryDate eventSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)uniqueServiceName
+- (instancetype)initWithSubscriptionID:(NSString *)subscriptionID expiryDate:(NSDate *)expiryDate eventSubscriptionURL:(NSURL *)eventSubscriptionURL serviceIdentifier:(NSString *)serviceIdentifier
 {
     if ((self = [super init])) {
         self.subscriptionID = subscriptionID;
         self.eventSubscriptionURL = eventSubscriptionURL;
         [self updateTimersWithExpiryDate:expiryDate];
-        self.uniqueServiceName = uniqueServiceName;
+        self.uniqueServiceName = serviceIdentifier;
     }
     return self;
 }
@@ -152,7 +152,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         for (id<UPPEventSubscriptionDelegate> observer in self.observers) {
-            [observer eventRecieved:event];
+            [observer eventReceived:event];
         }
     });
 }

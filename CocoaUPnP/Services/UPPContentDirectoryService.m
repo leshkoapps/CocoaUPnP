@@ -45,9 +45,9 @@ NSString * const UPPCDSSortCriteriaKey = @"SortCriteria";
                               completion:completion];
 }
 
-- (NSURLSessionDataTask *)browseWithObjectID:(NSString *)objectId browseFlag:(NSString *)browseFlag filter:(NSString *)filter startingIndex:(NSNumber *)startingIndex requestedCount:(NSNumber *)requestedCount sortCritera:(NSString *)sortCriteria completion:(void (^)(NSDictionary *, NSError *))completion
+- (void)browseWithObjectID:(NSString *)objectId browseFlag:(NSString *)browseFlag filter:(NSString *)filter startingIndex:(NSNumber *)startingIndex requestedCount:(NSNumber *)requestedCount sortCritera:(NSString *)sortCriteria completion:(void (^)(NSDictionary *, NSError *))completion
 {
-    if (!completion) { return nil; }
+    if (!completion) { return; }
 
     NSArray *k = @[ UPPCDSObjectIDKey,
                     UPPCDSBrowseFlagKey,
@@ -66,7 +66,7 @@ NSString * const UPPCDSSortCriteriaKey = @"SortCriteria";
     UPPParameters *params = [UPPParameters paramsWithKeys:k
                                                    values:v];
 
-    return [self _sendPostRequestWithParameters:params action:@"Browse" completion:^(NSDictionary *responseObject, NSError *error) {
+    [self _sendPostRequestWithParameters:params action:@"Browse" completion:^(NSDictionary *responseObject, NSError *error) {
 
         if (responseObject) {
             [UPPMediaItemParser parseResults:responseObject withCompletion:^(NSDictionary *results, NSError *error) {
@@ -99,10 +99,10 @@ NSString * const UPPCDSSortCriteriaKey = @"SortCriteria";
               UPPCDSContainerIDKey: @"0" };
 }
 
-- (NSURLSessionDataTask *)searchWithContainerID:(NSString *)containerId searchCriteria:(NSString *)searchCriteria filter:(NSString *)filter startingIndex:(NSNumber *)startingIndex requestedCount:(NSNumber *)requestedCount sortCritera:(NSString *)sortCriteria completion:(void (^)(NSDictionary *, NSError *))completion
+- (void)searchWithContainerID:(NSString *)containerId searchCriteria:(NSString *)searchCriteria filter:(NSString *)filter startingIndex:(NSNumber *)startingIndex requestedCount:(NSNumber *)requestedCount sortCritera:(NSString *)sortCriteria completion:(void (^)(NSDictionary *, NSError *))completion
 {
 
-    if (!completion) { return nil; }
+    if (!completion) { return; }
 
     NSArray *keys = @[ UPPCDSContainerIDKey,
                        UPPCDSSearchCriteriaKey,
@@ -120,9 +120,17 @@ NSString * const UPPCDSSortCriteriaKey = @"SortCriteria";
 
     UPPParameters *params = [UPPParameters paramsWithKeys:keys values:values];
 
-    return [self _sendPostRequestWithParameters:params
-                                  action:@"Search"
-                              completion:completion];
+    [self _sendPostRequestWithParameters:params action:@"Search" completion:^(NSDictionary *responseObject, NSError *error) {
+
+        if (responseObject) {
+            [UPPMediaItemParser parseResults:responseObject withCompletion:^(NSDictionary *results, NSError *error) {
+                completion(results, error);
+            }];
+
+        } else {
+            completion(nil, error);
+        }
+    }];
 }
 
 @end
