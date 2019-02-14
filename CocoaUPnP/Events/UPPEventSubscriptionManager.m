@@ -79,7 +79,7 @@
 
 #pragma mark - Public Methods
 
-- (void)subscribeObserver:(id<UPPEventSubscriptionDelegate>)observer toService:(UPPBasicService *)service completion:(void(^)(UPPEventSubscription *subscription, NSError *error))completion
+- (NSURLSessionDataTask *)subscribeObserver:(id<UPPEventSubscriptionDelegate>)observer toService:(UPPBasicService *)service completion:(void(^)(UPPEventSubscription *subscription, NSError *error))completion
 {
     if (![self.eventServer isRunning]) {
         self.eventServer.eventDelegate = self;
@@ -94,14 +94,14 @@
         if (completion) {
             completion(subscription, nil);
         }
-        return;
+        return nil;
     }
 
     // Create a new subscription.
     NSURL *url = service.eventSubscriptionURL;
     subscription = [UPPEventSubscription subscriptionWithSubscriptionURL:url
                                                        serviceIdentifier:service.uniqueServiceName];
-    [self subscribe:subscription completion:^(NSString *subscriptionID, NSDate *expiryDate, NSError *error) {
+    return [self subscribe:subscription completion:^(NSString *subscriptionID, NSDate *expiryDate, NSError *error) {
         if (error) {
             if (completion) {
                 completion(nil, error);
@@ -118,14 +118,14 @@
     }];
 }
 
-- (void)subscribe:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
+- (NSURLSessionDataTask *)subscribe:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
 {
-    if (!completion) { return; }
+    if (!completion) { return nil; }
 
     NSURL *url = subscription.eventSubscriptionURL;
     NSURLRequest *request = [self subscriptionRequestWithEventSubscriptionURL:url];
 
-    [self sendSubscriptionRequest:request completion:^(NSURLResponse *response, NSError *error) {
+    return [self sendSubscriptionRequest:request completion:^(NSURLResponse *response, NSError *error) {
         NSInteger code = [(NSHTTPURLResponse *)response statusCode];
 
         if (code != 200) {
@@ -143,13 +143,13 @@
     }];
 }
 
-- (void)renewSubscription:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
+- (NSURLSessionDataTask *)renewSubscription:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
 {
     if (!subscription.subscriptionID) {
         [self subscribe:subscription completion:^(NSString *subscriptionID, NSDate *expiryDate, NSError *error) {
             [subscription updateSubscriptionID:subscriptionID expiryDate:expiryDate];
         }];
-        return;
+        return nil;
     }
     NSURL *subscriptionURL = subscription.eventSubscriptionURL;
 
@@ -181,11 +181,12 @@
     }];
 
     [task resume];
+    return task;
 }
 
-- (void)subscriptionExpired:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
+- (NSURLSessionDataTask *)subscriptionExpired:(UPPEventSubscription *)subscription completion:(void(^)(NSString *subscriptionID, NSDate *expiryDate, NSError *error))completion
 {
-    [self subscribe:subscription completion:completion];
+    return [self subscribe:subscription completion:completion];
 }
 
 - (NSURLRequest *)subscriptionRequestWithEventSubscriptionURL:(NSURL *)url
@@ -209,14 +210,14 @@
     return [self requestWithURL:url method:@"SUBSCRIBE" headers:headers];
 }
 
-- (void)unsubscribe:(UPPEventSubscription *)subscription completion:(void(^)(BOOL success))completion;
+- (NSURLSessionDataTask *)unsubscribe:(UPPEventSubscription *)subscription completion:(void(^)(BOOL success))completion;
 {
     [subscription invalidateTimers];
     [self.activeSubscriptions removeObject:subscription];
 
     if (!subscription.eventSubscriptionURL || !subscription.subscriptionID) {
         if (completion) { completion(NO); }
-        return;
+        return nil;
     }
 
     NSURL *subscriptionURL = subscription.eventSubscriptionURL;
@@ -249,6 +250,7 @@
     }];
 
     [task resume];
+    return task;
 }
 
 - (void)removeObserver:(id<UPPEventSubscriptionDelegate>)observer fromService:(UPPBasicService *)service completion:(void (^)(BOOL))completion
@@ -343,10 +345,10 @@
     return [NSDate dateWithTimeIntervalSinceNow:[timeout doubleValue]];
 }
 
-- (void)sendSubscriptionRequest:(NSURLRequest *)request completion:(void (^)(NSURLResponse *response, NSError *error))completion
+- (NSURLSessionDataTask *)sendSubscriptionRequest:(NSURLRequest *)request completion:(void (^)(NSURLResponse *response, NSError *error))completion
 {
-    if (!completion) { return; }
-    if (!request) { return; }
+    if (!completion) { return nil; }
+    if (!request) { return nil; }
 
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -355,6 +357,7 @@
     }];
 
     [task resume];
+    return task;
 }
 
 - (NSMutableURLRequest *)requestWithURL:(NSURL *)url method:(NSString *)method headers:(NSDictionary *)headers

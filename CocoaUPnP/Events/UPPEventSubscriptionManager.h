@@ -41,7 +41,7 @@
  @param completion A block to run when the subscription call finishes. Returns a
  BOOL corresponding to wether the call succeeded or failed.
  */
-- (void)subscribeObserver:(nonnull id<UPPEventSubscriptionDelegate>)observer toService:(nonnull UPPBasicService *)service completion:(nullable void(^)(UPPEventSubscription * _Nullable subscription, NSError * _Nullable error))completion;
+- (NSURLSessionDataTask *)subscribeObserver:(nonnull id<UPPEventSubscriptionDelegate>)observer toService:(nonnull UPPBasicService *)service completion:(nullable void(^)(UPPEventSubscription * _Nullable subscription, NSError * _Nullable error))completion;
 
 /**
  Renew a current subscription.
@@ -51,7 +51,7 @@
  Returns the new subscription identifier, the new expiry date, or if renewing
  failed, an error object.
  */
-- (void)renewSubscription:(nonnull UPPEventSubscription *)subscription completion:(nonnull void(^)(NSString * _Nullable subscriptionID, NSDate * _Nullable expiryDate, NSError * _Nullable error))completion;
+- (NSURLSessionDataTask *)renewSubscription:(nonnull UPPEventSubscription *)subscription completion:(nonnull void(^)(NSString * _Nullable subscriptionID, NSDate * _Nullable expiryDate, NSError * _Nullable error))completion;
 
 /**
  Renew an expired subscription. This differs from renewing an existing
@@ -63,7 +63,7 @@
  Returns the new subscription identifier, the new expiry date, or if renewing
  failed, an error object.
  */
-- (void)subscriptionExpired:(nonnull UPPEventSubscription *)subscription completion:(nonnull void(^)(NSString * _Nullable subscriptionID, NSDate * _Nullable expiryDate, NSError * _Nullable error))completion;
+- (NSURLSessionDataTask *)subscriptionExpired:(nonnull UPPEventSubscription *)subscription completion:(nonnull void(^)(NSString * _Nullable subscriptionID, NSDate * _Nullable expiryDate, NSError * _Nullable error))completion;
 
 /**
  Unsubscribe an observer from a service. If there are no more observers, then
@@ -85,7 +85,7 @@
  @param completion A block to run when the subscription call finishes. Returns a
  BOOL corresponding to whether the call succeeded or failed.
  */
-- (void)unsubscribe:(nonnull UPPEventSubscription *)subscription completion:(nullable void(^)(BOOL success))completion;
+- (NSURLSessionDataTask *)unsubscribe:(nonnull UPPEventSubscription *)subscription completion:(nullable void(^)(BOOL success))completion;
 
 /**
  Remove all subscriptions for an array of services. This is run when discovery

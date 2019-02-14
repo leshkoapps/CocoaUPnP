@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completion A completion block which returns the parsed response, or an
      error if unsuccessful
  */
-- (void)protocolInfoWithCompletion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)protocolInfoWithCompletion:(UPPResponseBlock)completion;
 
 /**
  Tell device to prepare to connect to the network. See 2.4.2 of the service
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completion            A completion block which returns the parsed
      information, or an error if unsuccessful
  */
-- (void)prepareForConnectionWithProtocolInfo:(NSString *)protocolInfo peerConnectionManager:(NSString *)peerConnectionManager peerConnectionID:(NSString *)peerConnectionId direction:(NSString *)direction completion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)prepareForConnectionWithProtocolInfo:(NSString *)protocolInfo peerConnectionManager:(NSString *)peerConnectionManager peerConnectionID:(NSString *)peerConnectionId direction:(NSString *)direction completion:(UPPResponseBlock)completion;
 
 /**
  Inform the device that connection is complete. See 2.4.3 of the service template
@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
  call, along with an error object if the call was unsuccessful.
 
  */
-- (void)connectionCompleteWithConnectionID:(NSString *)connectionId success:(UPPSuccessBlock)success;
+- (NSURLSessionDataTask *)connectionCompleteWithConnectionID:(NSString *)connectionId success:(UPPSuccessBlock)success;
 
 /**
  Get current connection IDs. See 2.4.4 of the service template
@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completion A completion block which returns the parsed information, or
      an error if unsuccessful
  */
-- (void)currentConnectionIDsWithCompletion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)currentConnectionIDsWithCompletion:(UPPResponseBlock)completion;
 
 /**
  Get current connection info. See 2.4.4 of the service template
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completion   A completion block which returns the parsed information, or
      an error if unsuccessful
  */
-- (void)currentConnectionInfoWithConnectionID:(NSString *)connectionId completion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)currentConnectionInfoWithConnectionID:(NSString *)connectionId completion:(UPPResponseBlock)completion;
 
 NS_ASSUME_NONNULL_END
 

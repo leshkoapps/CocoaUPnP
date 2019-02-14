@@ -8,18 +8,18 @@
 
 @implementation UPPConnectionManagerService
 
-- (void)protocolInfoWithCompletion:(UPPResponseBlock)completion
+- (NSURLSessionDataTask *)protocolInfoWithCompletion:(UPPResponseBlock)completion
 {
-    if (!completion) { return; }
+    if (!completion) { return nil; }
 
-    [self _sendPostRequestWithParameters:nil
+    return [self _sendPostRequestWithParameters:nil
                                   action:@"GetProtocolInfo"
                               completion:completion];
 }
 
-- (void)prepareForConnectionWithProtocolInfo:(NSString *)protocolInfo peerConnectionManager:(NSString *)peerConnectionManager peerConnectionID:(NSString *)peerConnectionId direction:(NSString *)direction completion:(UPPResponseBlock)completion
+- (NSURLSessionDataTask *)prepareForConnectionWithProtocolInfo:(NSString *)protocolInfo peerConnectionManager:(NSString *)peerConnectionManager peerConnectionID:(NSString *)peerConnectionId direction:(NSString *)direction completion:(UPPResponseBlock)completion
 {
-    if (!protocolInfo || !peerConnectionManager || !peerConnectionId || !completion) { return; }
+    if (!protocolInfo || !peerConnectionManager || !peerConnectionId || !completion) { return nil; }
 
     NSArray *k = @[ @"RemoteProtocolInfo",
                     @"PeerConnectionManager",
@@ -33,39 +33,39 @@
 
     UPPParameters *params = [UPPParameters paramsWithKeys:k values:v];
 
-    [self _sendPostRequestWithParameters:params
+    return [self _sendPostRequestWithParameters:params
                                   action:@"PrepareForConnection"
                               completion:completion];
 }
 
-- (void)connectionCompleteWithConnectionID:(NSString *)connectionId success:(UPPSuccessBlock)success;
+- (NSURLSessionDataTask *)connectionCompleteWithConnectionID:(NSString *)connectionId success:(UPPSuccessBlock)success;
 {
-    if (!connectionId || !success) { return; }
+    if (!connectionId || !success) { return nil; }
 
     UPPParameters *params = [UPPParameters paramsWithKey:@"ConnectionID"
                                                    value:connectionId];
 
-    [self _sendPostRequestWithParameters:params
+    return [self _sendPostRequestWithParameters:params
                                   action:@"ConnectionComplete"
                                  success:success];
 }
 
-- (void)currentConnectionIDsWithCompletion:(UPPResponseBlock)completion
+- (NSURLSessionDataTask *)currentConnectionIDsWithCompletion:(UPPResponseBlock)completion
 {
-    if (!completion) { return; }
+    if (!completion) { return nil; }
 
-    [self _sendPostRequestWithParameters:nil
+    return [self _sendPostRequestWithParameters:nil
                                   action:@"GetCurrentConnectionIDs"
                               completion:completion];
 }
 
-- (void)currentConnectionInfoWithConnectionID:(NSString *)connectionId completion:(UPPResponseBlock)completion
+- (NSURLSessionDataTask *)currentConnectionInfoWithConnectionID:(NSString *)connectionId completion:(UPPResponseBlock)completion
 {
-    if (!connectionId || !completion) { return; }
+    if (!connectionId || !completion) { return nil; }
 
     UPPParameters *params = [UPPParameters paramsWithKey:@"ConnectionID" value:connectionId];
 
-    [self _sendPostRequestWithParameters:params
+    return [self _sendPostRequestWithParameters:params
                                   action:@"GetCurrentConnectionInfo"
                               completion:completion];
 }

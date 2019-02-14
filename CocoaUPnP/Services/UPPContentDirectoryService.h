@@ -28,7 +28,7 @@ extern NSString * const BrowseDirectChildren;
  @param completion A completion block which returns the parsed response, or an
      error if unsuccessful
  */
-- (void)searchCapabilitiesWithCompletion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)searchCapabilitiesWithCompletion:(UPPResponseBlock)completion;
 
 /**
  Get the devices sort capabilities
@@ -36,7 +36,7 @@ extern NSString * const BrowseDirectChildren;
  @param completion A completion block which returns the parsed response, or an
      error if unsuccessful
  */
-- (void)sortCapabilitiesWithCompletion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)sortCapabilitiesWithCompletion:(UPPResponseBlock)completion;
 
 /**
  Get the devices system update ID
@@ -44,7 +44,7 @@ extern NSString * const BrowseDirectChildren;
  @param completion A completion block which returns the parsed response, or an
      error if unsuccessful
  */
-- (void)systemUpdateIDWithCompletion:(UPPResponseBlock)completion;
+- (NSURLSessionDataTask *)systemUpdateIDWithCompletion:(UPPResponseBlock)completion;
 
 
 #pragma mark - Fetching Items
