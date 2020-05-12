@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "CocoaUPnP"
-  s.version      = "2.0.2"
+  s.version      = "2.0.3"
   s.summary      = "A modern and well tested UPnP library which feature asynchronous network calls."
 
   s.description  = <<-DESC
@@ -26,6 +26,9 @@ Pod::Spec.new do |s|
 
   s.dependency 'CocoaAsyncSocket', '~> 7.6.3'
   s.dependency 'Ono', '~> 2.1.1'
-  s.dependency 'AFNetworking', '~> 3.2.1'
+  s.dependency 'AFNetworking/NSURLSession', '3.2.1'
+  s.dependency 'AFNetworking/Reachability', '3.2.1'
+  s.dependency 'AFNetworking/Security', '3.2.1'
+  s.dependency 'AFNetworking/Serialization', '3.2.1'
   s.dependency 'GCDWebServer', '~> 3.5.2'
 end
